@@ -1,0 +1,27 @@
+.classpath
+.DS_Store
+.idea
+.idea_modules
+.project
+.settings
+.history
+.grunt
+TODO.txt
+tmp
+target
+project/project/target
+project/target
+build
+TestScripts.java
+setup.sh
+.sass-cache
+.target
+/bin
+.cache
+.vagrant
+verify.rb
+.dpl
+/logs
+
+# IntelliJ project files
+*.iml
