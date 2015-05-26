@@ -62,7 +62,9 @@ import com.stormpath.sdk.impl.client.DefaultClientBuilder;
 @ComponentScan({"controllers","filters","interceptors","models","org.sagebionetworks.bridge"})
 @Configuration
 public class BridgeSpringConfig {
-    
+
+    private static final BridgeConfig CONFIG = BridgeConfigFactory.getConfig();
+
     @Bean(name = "healthCodeEncryptor")
     @Resource(name = "bridgeConfig")
     public AesGcmEncryptor healthCodeEncryptor(BridgeConfig bridgeConfig) {
@@ -91,7 +93,7 @@ public class BridgeSpringConfig {
     @Resource(name = "awsCredentials")
     public AmazonDynamoDBClient dynamoDbClient(BasicAWSCredentials awsCredentials) {
         AmazonDynamoDBClient DYNAMOCLIENT = new AmazonDynamoDBClient(awsCredentials);
-        DYNAMOCLIENT.setRegion(Region.getRegion(Regions.fromName(bridgeConfig.getProperty("aws.region"))));
+        DYNAMOCLIENT.setRegion(Region.getRegion(Regions.fromName(CONFIG.getProperty("aws.region"))));
         return DYNAMOCLIENT;
     }
     
@@ -203,10 +205,10 @@ public class BridgeSpringConfig {
 
         // create Jedis pool
         final JedisPool jedisPool;
-        if (config.isLocal()) {
+        String password = config.getProperty("redis.password");
+        if (password.isEmpty()) {
             jedisPool = new JedisPool(poolConfig, host, port, timeout);
         } else {
-            String password = config.getProperty("redis.password");
             jedisPool = new JedisPool(poolConfig, host, port, timeout, password);
         }
 
