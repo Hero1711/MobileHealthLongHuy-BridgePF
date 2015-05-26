@@ -36,6 +36,8 @@ import redis.clients.jedis.JedisPool;
 import redis.clients.jedis.JedisPoolConfig;
 
 import com.amazonaws.auth.BasicAWSCredentials;
+import com.amazonaws.regions.Region;
+import com.amazonaws.regions.Regions;
 import com.amazonaws.services.dynamodbv2.AmazonDynamoDB;
 import com.amazonaws.services.dynamodbv2.AmazonDynamoDBClient;
 import com.amazonaws.services.dynamodbv2.datamodeling.DynamoDBMapper;
@@ -88,7 +90,9 @@ public class BridgeSpringConfig {
     @Bean(name = "dynamoDbClient")
     @Resource(name = "awsCredentials")
     public AmazonDynamoDBClient dynamoDbClient(BasicAWSCredentials awsCredentials) {
-        return new AmazonDynamoDBClient(awsCredentials);
+        AmazonDynamoDBClient DYNAMOCLIENT = new AmazonDynamoDBClient(awsCredentials);
+        DYNAMOCLIENT.setRegion(Region.getRegion(Regions.fromName(bridgeConfig.getProperty("aws.region"))));
+        return DYNAMOCLIENT;
     }
     
     @Bean(name = "s3Client")
@@ -317,7 +321,7 @@ public class BridgeSpringConfig {
             .setSecret(bridgeConfig.getStormpathSecret().trim()).build();
         
         ClientBuilder clientBuilder = Clients.builder().setApiKey(apiKey);
-        ((DefaultClientBuilder)clientBuilder).setBaseUrl("https://enterprise.stormpath.io/v1");
+        ((DefaultClientBuilder)clientBuilder).setBaseUrl(bridgeConfig.getStormpathBaseUrl());
         return clientBuilder.build();        
     }
 

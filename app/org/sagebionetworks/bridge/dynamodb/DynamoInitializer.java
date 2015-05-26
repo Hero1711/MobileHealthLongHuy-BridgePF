@@ -22,6 +22,8 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import com.amazonaws.auth.BasicAWSCredentials;
+import com.amazonaws.regions.Region;
+import com.amazonaws.regions.Regions;
 import com.amazonaws.services.dynamodbv2.AmazonDynamoDB;
 import com.amazonaws.services.dynamodbv2.AmazonDynamoDBClient;
 import com.amazonaws.services.dynamodbv2.datamodeling.DynamoDBHashKey;
@@ -67,9 +69,11 @@ public class DynamoInitializer {
 
     private static final AmazonDynamoDB DYNAMO;
     static {
+        String regionName = CONFIG.getProperty("aws.region");
         String awsKey = CONFIG.getProperty("aws.key");
         String secretKey = CONFIG.getProperty("aws.secret.key");
         DYNAMO = new AmazonDynamoDBClient(new BasicAWSCredentials(awsKey, secretKey));
+        DYNAMO.setRegion(Region.getRegion(Regions.fromName(regionName)));
     }
 
     /**

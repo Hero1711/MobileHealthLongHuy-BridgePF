@@ -15,6 +15,9 @@ import javax.mail.internet.MimeBodyPart;
 import javax.mail.internet.MimeMessage;
 import javax.mail.internet.MimeMultipart;
 
+import org.sagebionetworks.bridge.config.BridgeConfig;
+import org.sagebionetworks.bridge.config.BridgeConfigFactory;
+import org.sagebionetworks.bridge.config.Environment;
 import org.sagebionetworks.bridge.exceptions.BridgeServiceException;
 import org.sagebionetworks.bridge.services.email.MimeTypeEmail;
 import org.sagebionetworks.bridge.services.email.MimeTypeEmailProvider;
@@ -38,7 +41,9 @@ public class SendMailViaAmazonService implements SendMailService {
 
     private static final Logger logger = LoggerFactory.getLogger(SendMailViaAmazonService.class);
 
-    private static final Region REGION = Region.getRegion(Regions.US_EAST_1);
+    private static final BridgeConfig CONFIG = BridgeConfigFactory.getConfig();
+
+    private static final Region REGION = Region.getRegion(Regions.fromName(CONFIG.getProperty("aws.region")));
 
     private String supportEmail;
     private AmazonSimpleEmailServiceClient emailClient;

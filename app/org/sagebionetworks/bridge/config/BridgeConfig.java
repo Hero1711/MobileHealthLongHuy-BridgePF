@@ -23,6 +23,7 @@ public class BridgeConfig {
     private static final String ENTERPRISE_STORMPATH_ID =  "enterprise.stormpath.id";
     private static final String ENTERPRISE_STORMPATH_SECRET =  "enterprise.stormpath.secret";
     private static final String ENTERPRISE_STORMPATH_APPLICATION_HREF =  "enterprise.stormpath.application.href";
+    private static final String STORMPATH_BASE_URL =  "stormpath.base.url";
     
     private static final String CONSENTS_BUCKET =  "consents.bucket";
     
@@ -177,6 +178,10 @@ public class BridgeConfig {
 
     public String getStormpathApplicationHref() {
         return getProperty(ENTERPRISE_STORMPATH_APPLICATION_HREF);
+    }
+
+    public String getStormpathBaseUrl() {
+        return getProperty(STORMPATH_BASE_URL);
     }
 
     public String getHealthCodeKey() {
